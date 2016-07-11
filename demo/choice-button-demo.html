@@ -1,0 +1,42 @@
+<link rel="import" href="../corespring-choice-button.html"/>
+<dom-module is="choice-button-demo">
+  <template>
+    <style>
+
+      .comp-cell{
+        width: 400px;
+      }
+    </style>
+    <table>
+      <tr>
+        <th>Comp
+        </th>
+        <th>Data
+        </th>
+      </tr>
+      <tr>
+        <td class="comp-cell"><corespring-choice-button
+          selected="{{data.selected}}"
+          value="{{data.value}}"
+          disabled="{{data.disabled}}"
+          mode="{{data.mode}}"
+          key="{{data.key}}"
+          label="{{data.label}}"
+        ></corespring-choice-button></td>
+        <td><pre>{{_dataString}}</pre></td>
+      </tr>
+    </table>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'choice-button-demo',
+    properties: {
+      data: {type: Object, observer: '_dataChange'}
+    },
+    _dataChange: function(d){
+      this._dataString = JSON.stringify(d, null, '  ');
+    }
+  })
+</script>

@@ -1,0 +1,45 @@
+<html>
+
+<head>
+  <link rel="import" href="./choice-button-demo.html" />
+  <script type="text/javascript" src="../../lodash/dist/lodash.js"></script>
+  <style>
+    .header {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <script type="text/javascript">
+
+    function setElement(id, data){
+      var node = document.querySelector(id);
+      if(node){
+        node.data = data; 
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+      function base(){
+        return {
+          label: 'This is a label',
+          key: 'A',
+          value: 'v',
+          selected: true,
+          disabled: false,
+          mode: 'checkbox',
+          correctness: 'correct'
+        }
+      };
+
+      setElement('#one', _.assign(base(), {}));
+      setElement('#two', _.assign(base(), {mode: 'radio'}));
+    });
+    
+  </script>
+  <choice-button-demo id="one"></choice-button-demo>
+  <choice-button-demo id="two"></choice-button-demo>
+</body>
+
+</html>

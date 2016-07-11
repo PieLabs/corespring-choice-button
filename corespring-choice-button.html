@@ -1,0 +1,93 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/typography.html" />
+<link rel="import" href="../paper-checkbox/paper-checkbox.html" />
+<link rel="import" href="../paper-radio-button/paper-radio-button.html" />
+<!-- 
+  An element that can be either a checkbox or a radio button, with an optional key and content
+  @demo demo/index.html
+-->
+
+<dom-module id="corespring-choice-button">
+  <template>
+    <style>
+
+      :host{
+        --primary-color: #FFFF00; /*var(--paper-indigo-500);*/
+        --primary-text-color: #993399;
+        @apply(--paper-font-common-base);
+        --paper-checkbox-label-color: var(--choice-button-label-color);
+        --paper-radio-button-label-color: var(--choice-button-label-color);
+      }
+
+      paper-checkbox{
+        border-color: var(--choice-button-incorrect-border-color, #ED831C);
+      }
+
+      .incorrect {
+        border-color: var(--choice-button-incorrect-border-color, #ED831C);
+      }
+      
+      .correct {
+        border-color: var(--choice-button-correct-border-color, #12D34F);
+      }
+      
+      .missing {
+        border-color: var(--choice-button--missing-border-color, #F2E239);
+      }
+      
+      paper-checkbox {
+        margin-top: 2px;
+        margin-bottom: 2px;
+        padding: 12px;
+        border-width: 1px;
+        border-color: rgba(0, 0, 0, 0);
+        border-style: solid;
+      }
+    </style>
+    <div>
+      <template is="dom-if" if="{{_use('checkbox', mode)}}">
+        <paper-checkbox 
+          value="{{value}}" 
+          checked="{{selected}}" 
+          on-change="_onChange" 
+          class$="{{correctness}}"
+          disabled="{{disabled}}">{{key}}.</paper-checkbox>
+      </template>
+      <template is="dom-if" if="{{_use('radio', mode)}}">
+        <paper-radio-button 
+          value="{{value}}" 
+          checked="{{selected}" 
+          on-change="_onChange" 
+          class$="{{correctness}}"
+          disabled="{{disabled}}">{{key}}.</paper-radio-button>
+      </template>
+      <span>{{label}}</span>
+    </div>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "corespring-choice-button",
+    properties: {
+      mode: {type:String},
+      key: {type:String},
+      label: {type:String},
+      value: {type:String},
+      correctness: {type:String},
+      disabled:{type:Boolean},
+      selected: {type:Boolean}
+      /**
+       * Fired when a button is checked/unchecked.
+       * @event change
+       * 
+       */
+    },
+    _use: function(desired, actual){
+      return desired === actual;
+    },
+    _onChange: function(event){
+      event.stopImmediatePropagation();
+      this.fire('change');
+    }
+  });
+</script>
