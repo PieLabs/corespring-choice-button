@@ -3,6 +3,7 @@
 <link rel="import" href="../paper-checkbox/paper-checkbox.html" />
 <link rel="import" href="../paper-radio-button/paper-radio-button.html" />
 <link rel="import" href="./feedback-tick.html" />
+<link rel="import" href="./html-echo.html" />
 
 <!-- 
   An element that can be either a checkbox or a radio button, with an optional key and content
@@ -34,8 +35,12 @@
         width: var(--choice-button-height, 33px);
         height: var(--choice-button-height, 33px);
         float: left;
-        vertical-align: middle;
-        top: -3px;
+        vertical-align: top;
+        top: -5px;
+      }
+
+      paper-checkbox, paper-radio-button{
+        vertical-align: top;
       }
     </style>
     <div>
@@ -46,7 +51,7 @@
       <template is="dom-if" if="{{_equals('radio', mode)}}">
         <paper-radio-button noink value="{{value}}" checked="{{selected}}" on-change="_onChange" class$="{{correctness}}" disabled="{{disabled}}">{{key}}.</paper-radio-button>
       </template>
-      <span>{{label}}</span>
+      <span><html-echo html="{{label}}"></html-echo></span>
     </div>
   </template>
 </dom-module>
