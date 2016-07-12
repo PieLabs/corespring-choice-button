@@ -1,4 +1,22 @@
 <link rel="import" href="../corespring-choice-button.html"/>
+<link rel="import" href="../../paper-input/paper-input.html"/>
+<link rel="import" href="../../paper-radio-group/paper-radio-group.html"/>
+
+<dom-module is="feedback-tick-demo">
+  <template>
+    <paper-input label="correctness" value="{{correctness}}"></paper-input>
+    <br/>
+    <feedback-tick correctness="{{correctness}}"></feedback-tick>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'feedback-tick-demo',
+    properties: {
+      correctness: {type: String}
+    }
+  })
+</script>
 <dom-module is="choice-button-demo">
   <template>
     <style>
@@ -6,23 +24,53 @@
       .comp-cell{
         width: 400px;
       }
+
+      tr{
+        padding-bottom: 10px;
+      }
+
+      table{
+        padding-bottom: 40px;
+      }
+
+      th{
+        text-align: left;
+      }
+
+      td{
+        vertical-align: top;
+      }
     </style>
     <table>
       <tr>
-        <th>Comp
-        </th>
-        <th>Data
-        </th>
+        <th>Comp</th>
+        <th>Controls</th>
+        <th>Data</th>
       </tr>
       <tr>
         <td class="comp-cell"><corespring-choice-button
           selected="{{data.selected}}"
           value="{{data.value}}"
           disabled="{{data.disabled}}"
+          correctness="{{data.correctness}}"
           mode="{{data.mode}}"
           key="{{data.key}}"
           label="{{data.label}}"
         ></corespring-choice-button></td>
+        <td>
+          <paper-input label="label" value="{{data.label}}"></paper-input>
+          <paper-input label="key" value="{{data.key}}"></paper-input>
+          <paper-input label="correctness" value="{{data.correctness}}"></paper-input>
+          <br/>
+          <paper-radio-group selected="{{data.mode}}">
+            <paper-radio-button name="radio">radio</paper-radio-button>
+            <paper-radio-button name="checkbox">checkbox</paper-radio-button>
+          </paper-radio-group>
+          <br/>
+          <paper-checkbox checked="{{data.selected}}">selected</paper-checkbox>
+          <br/>
+          <paper-checkbox checked="{{data.disabled}}">disabled</paper-checkbox>
+        </td>
         <td><pre>{{_dataString}}</pre></td>
       </tr>
     </table>
@@ -33,7 +81,7 @@
   Polymer({
     is: 'choice-button-demo',
     properties: {
-      data: {type: Object, observer: '_dataChange'}
+      data: {type: Object, notify: true, observer: '_dataChange'}
     },
     _dataChange: function(d){
       this._dataString = JSON.stringify(d, null, '  ');

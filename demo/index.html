@@ -34,12 +34,15 @@
       };
 
       setElement('#one', _.assign(base(), {}));
-      setElement('#two', _.assign(base(), {mode: 'radio'}));
+      setElement('#two', _.assign(base(), {disabled: true, mode: 'radio'}));
+      setElement('#three', _.assign(base(), {disabled: true, correctness: 'incorrect', mode: 'radio'}));
     });
     
   </script>
+  <!--<feedback-tick-demo correctness="correct"></feedback-tick-demo>-->
   <choice-button-demo id="one"></choice-button-demo>
-  <choice-button-demo id="two"></choice-button-demo>
+  <!--<choice-button-demo id="two"></choice-button-demo>
+  <choice-button-demo id="three"></choice-button-demo>-->
 </body>
 
 </html>

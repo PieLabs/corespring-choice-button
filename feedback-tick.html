@@ -1,0 +1,172 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/typography.html" />
+<link rel="import" href="../paper-checkbox/paper-checkbox.html" />
+<link rel="import" href="../paper-radio-button/paper-radio-button.html" />
+<link rel="import" href="../neon-animation/neon-animation.html" />
+<link rel="import" href="../neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+<!-- 
+  A feedback tick icon with animation
+-->
+<dom-module id="feedback-tick">
+  <template>
+    <style>
+
+      :host{
+        position: relative;
+        display: block;
+      }
+      
+      svg {
+        position: absolute;
+        display: inline-block;
+        width: var(--choice-button-height, 33px);
+        height: var(--choice-button-height, 33px);
+        vertical-align: middle;
+      }
+      
+      svg .incorrect-background {
+        fill: var(--choice-button-incorrect-color, orange);
+      }
+      
+      svg .correct-background {
+        fill: var(--choice-button-correct-color, green);
+      }
+    </style>
+
+    <svg 
+      id="incorrect-icon" 
+      preserveAspectRatio="xMinYMin meet" 
+      xmlns="http://www.w3.org/2000/svg" 
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px" 
+      y="0px" 
+      viewBox="0 0 44 40" 
+      style="enable-background:new 0 0 44 40;" 
+      xml:space="preserve">
+        <g>
+          <rect x="11" y="17.3" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.852 19.2507)" class="incorrect-background" width="16.6"
+            height="3.7"></rect>
+          <rect x="17.4" y="10.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.8175 19.209)" class="incorrect-background" width="3.7"
+            height="16.6"></rect>
+        </g>
+     </svg>
+     <svg id="correct-icon" preserveAspectRatio="xMinYMin meet" class="" version="1.1" x="0px" y="0px" viewBox="0 0 44 40" style="enable-background:new 0 0 44 40;"
+        xml:space="preserve">
+        <g>
+          <g>
+            <polygon class="correct-background" points="19.1,28.6 11.8,22.3 14.4,19.2 17.9,22.1 23.9,11.4 27.5,13.4"></polygon>
+          </g>
+        </g>
+      </svg>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'feedback-tick',
+    behaviors: [
+      Polymer.NeonAnimationRunnerBehavior
+    ],    
+    properties: {
+      correctness: {type: String, default: '', observer: '_onCorrectnessChange'},
+      _animations: {type: Array, default: []},
+      /**
+       * ignore: needed for neon-animation
+       */
+      animationConfig: {
+        value: function() {
+
+          var comp = this;
+
+          function inFromLeft(name){
+              return [{
+              name: 'slide-from-left-animation',
+              node: comp.$[name]
+            },
+              {
+              name: 'fade-in-animation',
+              node: comp.$[name]
+            }];
+          }
+
+          function outLeft(name){
+            return [
+              {
+              name: 'fade-out-animation',
+              node: comp.$[name]
+            },
+            {
+              name: 'slide-left-animation',
+              node: comp.$[name]
+            }
+            ];
+          }
+
+          return {
+            'correct-to-unknown' : outLeft('correct-icon'),
+            'correct-to-incorrect' : outLeft('correct-icon').concat(inFromLeft('incorrect-icon')),
+            'incorrect-to-correct' : outLeft('incorrect-icon').concat(inFromLeft('correct-icon')),
+            'incorrect-to-unknown' : outLeft('incorrect-icon'),
+            'unknown-to-correct' : inFromLeft('correct-icon'),
+            'unknown-to-incorrect' : inFromLeft('incorrect-icon')
+          }
+        }
+      }
+    },
+    listeners: {
+      'neon-animation-finish': '_onNeonAnimationFinish'
+    },
+    attached: function(){
+      this._animations = this._animations || [];
+      this._attached = true;
+      this._show(this.$['correct-icon'], this.correctness === 'correct');
+      this._show(this.$['incorrect-icon'], this.correctness === 'incorrect');
+    },
+    _show: function(n, show){
+      n.style.display = show ? 'block' : 'none';
+      n.style.opacity = show ? 1.0 : 0.0;
+    },
+    _onNeonAnimationFinish: function(){  
+      this._animations.pop();
+
+     if(this.correctness === 'correct'){
+       this._show(this.$['correct-icon'], true);
+       this._show(this.$['incorrect-icon'], false);
+     } else if (this.correctness === 'incorrect'){
+       this._show(this.$['correct-icon'], false);
+       this._show(this.$['incorrect-icon'], true);
+     } else {
+       this._show(this.$['correct-icon'], false);
+       this._show(this.$['incorrect-icon'],false); 
+     }
+    },
+    _onCorrectnessChange: function(n, o){
+      function getKey(v){
+        if(v === 'correct' || v === 'incorrect'){
+          return v;
+        }
+        return 'unknown';
+      }
+
+      var key = getKey(o) + '-to-' + getKey(n);
+      if(n === 'correct'){
+        this.$['correct-icon'].style.display = 'block';
+        this.$['correct-icon'].style.opacity = 1.0; 
+      } else if(n === 'incorrect'){
+        this.$['incorrect-icon'].style.display = 'block';
+        this.$['incorrect-icon'].style.opacity = 1.0; 
+      }
+      if(this._attached){
+
+        if(this._animations.length > 0){
+          return;
+        } 
+        this._animations.push(key);
+        this.playAnimation(key);
+      }
+    }
+  })
+</script>
