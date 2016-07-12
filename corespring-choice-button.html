@@ -16,18 +16,17 @@
       :host {
         @apply(--paper-font-common-base);
         --primary-color: var(--choice-button-color, --paper-indigo-500);
-        --primary-text-color: var(--choice-button-color, --paper-indigo-500);
         display: inline-block;
       }
       
       .incorrect {
         --primary-color: var(--choice-button-incorrect-color, orange);
-        --primary-text-color: var(--choice-button-incorrect-color, orange);
+        --primary-text-color: var(--choice-button-incorrect-text-color, orange);
       }
       
       .correct {
         --primary-color: var(--choice-button-correct-color, green);
-        --primary-text-color: var(--choice-button-correct-color, green);
+        --primary-text-color: var(--choice-button-correct-text-color, green);
       }
       
       feedback-tick {
@@ -39,17 +38,51 @@
         top: -5px;
       }
 
-      paper-checkbox, paper-radio-button{
+      paper-radio-button{
         vertical-align: top;
+        --paper-radio-button-checked-color: var(--choice-button-color, --paper-indigo-500);
+        --paper-radio-button-unchecked-color: var(--choice-button-color, --paper-indigo-500);
+        --paper-radio-button-label-color: var(--choice-button-text-color, --paper-indigo-500);
       }
+      
+      paper-radio-button.incorrect{
+        --paper-radio-button-checked-color: var(--choice-button-incorrect-color, --paper-orange-500);
+        --paper-radio-button-unchecked-color: var(--choice-button-incorrect-color, --paper-orange-500);
+        --paper-radio-button-label-color: var(--choice-button-text-incorrect-color, --paper-orange-500);
+      }
+      
+      paper-radio-button.correct{
+        --paper-radio-button-checked-color: var(--choice-button-correct-color, --paper-green-500);
+        --paper-radio-button-unchecked-color: var(--choice-button-correct-color, --paper-green-500);
+        --paper-radio-button-label-color: var(--choice-button-text-correct-color, --paper-green-500);
+      }
+
+      paper-checkbox{
+        --paper-checkbox-checked-color: var(--choice-button-color, --paper-indigo-500);
+        --paper-checkbox-unchecked-color: var(--choice-button-color, --paper-indigo-500);
+        --paper-checkbox-label-color: var(--choice-button-text-color, --paper-indigo-500);
+      }
+      
+      paper-checkbox.correct{
+        --paper-checkbox-checked-color: var(--choice-button-correct-color, --paper-green-500);
+        --paper-checkbox-unchecked-color: var(--choice-button-correct-color, --paper-green-500);
+        --paper-checkbox-label-color: var(--choice-button-text-correct-color, --paper-green-500);
+      }
+
+      paper-checkbox.incorrect{
+        --paper-checkbox-checked-color: var(--choice-button-incorrect-color, --paper-orange-500);
+        --paper-checkbox-unchecked-color: var(--choice-button-incorrect-color, --paper-orange-500);
+        --paper-checkbox-label-color: var(--choice-button-text-incorrect-color, --paper-orange-500);
+      }
+
     </style>
     <div>
       <feedback-tick correctness="{{correctness}}"></feedback-tick>
       <template is="dom-if" if="{{_equals('checkbox', mode)}}">
-        <paper-checkbox noink value="{{value}}" checked="{{selected}}" on-change="_onChange" class$="{{correctness}}" disabled="{{disabled}}">{{key}}.</paper-checkbox>
+        <paper-checkbox noink value="{{value}}" checked="{{selected}}" on-change="_onChange" class$="{{correctness}}" disabled="{{disabled}}"><b>{{key}}.</b></paper-checkbox>
       </template>
       <template is="dom-if" if="{{_equals('radio', mode)}}">
-        <paper-radio-button noink value="{{value}}" checked="{{selected}}" on-change="_onChange" class$="{{correctness}}" disabled="{{disabled}}">{{key}}.</paper-radio-button>
+        <paper-radio-button noink value="{{value}}" checked="{{selected}}" on-change="_onChange" class$="{{correctness}}" disabled="{{disabled}}"><b>{{key}}.</b></paper-radio-button>
       </template>
       <span><html-echo html="{{label}}"></html-echo></span>
     </div>
