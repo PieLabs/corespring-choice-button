@@ -113,7 +113,7 @@
     },
     _onChange: function(event){
       event.stopImmediatePropagation();
-      this.fire('change');
+      this.fire('change', {value: this.value, selected: this.selected});
     }
   });
 </script>
