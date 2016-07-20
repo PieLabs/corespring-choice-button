@@ -7,6 +7,19 @@
 
 <!-- 
   An element that can be either a checkbox or a radio button, with an optional key and content
+
+   ### Styling
+  The following custom properties and mixins are available for styling:
+  Custom property | Description | Default
+  ----------------|-------------|----------
+  `--choice-button-color` | the default color of the button | `--paper-indigo-500`
+  `--choice-button-text-color` | the default color of the button text | `--paper-indigo-500`
+  `--choice-button-correct-color` | the correct color of the button | `--paper-indigo-500`
+  `--choice-button-text-correct-color` | the correct color of the button text | `--paper-indigo-500`
+  `--choice-button-incorrect-color` | the incorrect color of the button | `--paper-indigo-500`
+  `--choice-button-text-incorrect-color` | the incorrect color of the button text | `--paper-indigo-500`
+
+
   @demo demo/index.html
 -->
 
@@ -36,6 +49,19 @@
         float: left;
         vertical-align: top;
         top: -5px;
+      }
+
+      html-echo{
+        color: var(--choice-button-text-color, --paper-indigo-500);
+        cursor: pointer;
+      }
+      
+      html-echo.correct{
+        color: var(--choice-button-text-correct-color, --paper-green-500);
+      }
+      
+      html-echo.incorrect{
+        color: var(--choice-button-text-incorrect-color, --paper-orange-500);
       }
 
       paper-radio-button{
@@ -84,7 +110,9 @@
       <template is="dom-if" if="{{_equals('radio', mode)}}">
         <paper-radio-button noink value="{{value}}" checked="{{selected}}" on-change="_onChange" class$="{{correctness}}" disabled="{{disabled}}"><b>{{key}}.</b></paper-radio-button>
       </template>
-      <span><html-echo html="{{label}}"></html-echo></span>
+      <span>
+        <html-echo on-click="_onHtmlClick" class$="{{correctness}}" html="{{label}}"></html-echo>
+      </span>
     </div>
   </template>
 </dom-module>
@@ -111,6 +139,10 @@
     },
     _equals: function(desired, actual){
       return desired === actual;
+    },
+    _onHtmlClick: function(event){
+      this.selected = !this.selected;
+      this._onChange(event);
     },
     _onChange: function(event){
       event.stopImmediatePropagation();

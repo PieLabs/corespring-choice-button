@@ -7,6 +7,7 @@
     .header {
       margin-top: 20px;
     }
+
   </style>
 </head>
 
@@ -38,14 +39,16 @@
         label: '<img src="./puppy.jpg"></img>',
         disabled: true, mode: 'radio'}));
       setElement('#three', _.assign(base(), {disabled: true, correctness: 'incorrect', mode: 'radio'}));
+      setElement('#four', _.assign(base(), {}));
     });
     
   </script>
   <!--<feedback-tick-demo correctness="correct"></feedback-tick-demo>-->
   <choice-button-demo id="one"></choice-button-demo>
   <choice-button-demo id="two"></choice-button-demo>
-  <!--<choice-button-demo id="two"></choice-button-demo>
-  <choice-button-demo id="three"></choice-button-demo>-->
+  <choice-button-demo id="three"></choice-button-demo>
+  <h1>Styled</h1>
+  <choice-button-demo class="styled" id="four"></choice-button-demo>
 </body>
 
 </html>
