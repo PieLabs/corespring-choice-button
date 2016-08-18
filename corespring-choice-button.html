@@ -141,6 +141,9 @@
       return desired === actual;
     },
     _onHtmlClick: function(event){
+      if(this.disabled){
+        return;
+      }
       this.selected = !this.selected;
       this._onChange(event);
     },
